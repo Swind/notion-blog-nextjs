@@ -4,8 +4,8 @@ import { getDatabase, getPage, getBlocks } from "../lib/notion";
 import Link from "next/link";
 import { databaseId } from "./index.js";
 import styles from "./post.module.css";
-import Code from "./components/code";
-import Bookmark from "./components/bookmark";
+import Code from "../components/code";
+import Bookmark from "../components/bookmark";
 
 export const Text = ({ text }) => {
   if (!text) {
@@ -91,7 +91,6 @@ const renderBlock = (block) => {
     case "child_page":
       return <p>{value.title}</p>;
     case "image":
-      console.log(value)
       const src =
         value.type === "external" ? value.external.url : value.file.url;
       const caption = value.caption && value.caption.length > 0 ? value.caption[0].plain_text : "";

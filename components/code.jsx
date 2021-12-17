@@ -5,7 +5,7 @@ import { highlight, languages } from 'prismjs'
 import 'prismjs/components/prism-jsx'
 
 export default function Code({ block }) {
-  let languageL = block.language.toLowerCase()
+  let languageL = block.language ? block.language.toLowerCase() : "javascript"
   let prismLanguage = languages[languageL] || languages.javascript
   let code = block.text[0].plain_text
 
