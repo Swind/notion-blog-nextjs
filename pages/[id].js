@@ -4,11 +4,12 @@ import { getDatabase, getPage, getBlocks } from "../lib/notion";
 import Link from "next/link";
 import { databaseId } from "./index.js";
 import styles from "./post.module.css";
+import Code from "./components/code";
+import Bookmark from "./components/bookmark";
 
 export const Text = ({ text }) => {
   if (!text) {
-    return null;
-  }
+    return null; }
   return text.map((value) => {
     const {
       annotations: { bold, code, color, italic, strikethrough, underline },
@@ -90,9 +91,10 @@ const renderBlock = (block) => {
     case "child_page":
       return <p>{value.title}</p>;
     case "image":
+      console.log(value)
       const src =
         value.type === "external" ? value.external.url : value.file.url;
-      const caption = value.caption ? value.caption[0].plain_text : "";
+      const caption = value.caption && value.caption.length > 0 ? value.caption[0].plain_text : "";
       return (
         <figure>
           <img src={src} alt={caption} />
@@ -103,9 +105,15 @@ const renderBlock = (block) => {
       return <hr key={id} />;
     case "quote":
       return <blockquote key={id}>{value.text[0].plain_text}</blockquote>;
+    case "code":
+      return <Code block={value}></Code>
+    case "table_of_contents":
+      return null
+    case "bookmark":
+      return <Bookmark block={value}></Bookmark>
     default:
       return `❌ Unsupported block (${
-        type === "unsupported" ? "unsupported by Notion API" : type
+        type === "unsupported" ? `unsupported by Notion API ${type}` : type
       })`;
   }
 };
