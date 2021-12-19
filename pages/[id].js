@@ -9,7 +9,8 @@ import Bookmark from "../components/bookmark";
 
 export const Text = ({ text }) => {
   if (!text) {
-    return null; }
+    return null;
+  }
   return text.map((value) => {
     const {
       annotations: { bold, code, color, italic, strikethrough, underline },
@@ -111,9 +112,8 @@ const renderBlock = (block) => {
     case "bookmark":
       return <Bookmark block={value}></Bookmark>
     default:
-      return `❌ Unsupported block (${
-        type === "unsupported" ? `unsupported by Notion API ${type}` : type
-      })`;
+      return `❌ Unsupported block (${type === "unsupported" ? `unsupported by Notion API ${type}` : type
+        })`;
   }
 };
 
