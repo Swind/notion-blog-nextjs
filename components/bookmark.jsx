@@ -19,7 +19,7 @@ export default function Bookmark({ block }) {
           </div>
           <div className={styles.link}>
             <div className={styles.favicon}>
-              <img src={favicon} alt="favicon" />
+              <img className={styles.favicon_img} src={favicon} alt="favicon" />
             </div>
             <div className={styles.linkText}>
               {block.url}
