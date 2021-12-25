@@ -1,32 +1,32 @@
 import React from 'react'
-import styles from "./bookmark.module.css"
 
 export default function Bookmark({ block }) {
   let preview = block.preview;
   let image = preview.image ? preview.image : null;
   let favicon = preview.favicons.length > 0 ? preview.favicons[0] : null;
+
   return (
-    <a href={block.url} className={styles.bookmark}>
-      <div className={styles.bookmark_container}>
-        <div className={styles.content}>
-          <div className={styles.main}>
-            <div className={styles.title}>
+    <a href={block.url}>
+      <div className="flex justify-start w-full h-full my-3 p-2 border rounded-md">
+        <div className="w-3/4 flex flex-col">
+          <div className="grow">
+            <div className="text-base overflow-hidden whitespace-nowrap text-ellipsis mb-1">
               {preview.title}
             </div>
-            <div className={styles.description}>
+            <div className="text-xs">
               {preview.description}
             </div>
           </div>
-          <div className={styles.link}>
-            <div className={styles.favicon}>
-              <img className={styles.favicon_img} src={favicon} alt="favicon" />
+          <div className="flex mt-2">
+            <div className="h-full flex flex-col justify-center mr-2">
+              <img className="w-4 h-4" src={favicon} alt="favicon" />
             </div>
-            <div className={styles.linkText}>
+            <div className="text-sm overflow-hidden whitespace-nowrap text-ellipsis">
               {block.url}
             </div>
           </div>
         </div>
-        <div className={styles.media}>
+        <div className="w-1/4 object-cover ml-4">
           {image ? <img src={image} alt={preview.title} /> : null}
         </div>
       </div>

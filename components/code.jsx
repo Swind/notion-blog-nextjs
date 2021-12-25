@@ -1,11 +1,7 @@
 import React from 'react'
 
 import { highlight, languages } from 'prismjs'
-
 import 'prismjs/components/prism-jsx'
-import 'prismjs/themes/prism-tomorrow.css'
-
-import styles from "./code.module.css"
 
 export default function Code({ block }) {
   let languageL = block.language ? block.language.toLowerCase() : "javascript"
@@ -14,7 +10,7 @@ export default function Code({ block }) {
 
   return (
     <pre className={"language-" + languageL}>
-      <code
+      <div
         dangerouslySetInnerHTML={{
           __html: highlight(code, prismLanguage, languageL)
         }}

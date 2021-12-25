@@ -3,7 +3,6 @@ import Head from "next/head";
 import { getDatabase, getPage, getBlocks } from "../lib/notion";
 import Link from "next/link";
 import { databaseId } from "./index.js";
-import styles from "./post.module.css";
 import Code from "../components/code";
 import Bookmark from "../components/bookmark";
 
@@ -11,7 +10,7 @@ export const Text = ({ text }) => {
   if (!text) {
     return null;
   }
-  return text.map((value) => {
+  return text.map((value, index) => {
     const {
       annotations: { bold, code, color, italic, strikethrough, underline },
       text,
@@ -19,13 +18,14 @@ export const Text = ({ text }) => {
     return (
       <span
         className={[
-          bold ? styles.bold : "",
-          code ? styles.code : "",
-          italic ? styles.italic : "",
-          strikethrough ? styles.strikethrough : "",
-          underline ? styles.underline : "",
+          bold ? "font-bold" : "",
+          code ? "font-mono bg-gray-100 py-1 px-2 rounded-sm" : "",
+          italic ? "italic" : "",
+          strikethrough ? "line-through" : "",
+          underline ? "underline" : "",
         ].join(" ")}
         style={color !== "default" ? { color } : {}}
+        key={index}
       >
         {text.link ? <a href={text.link.url}>{text.content}</a> : text.content}
       </span>
@@ -46,19 +46,19 @@ const renderBlock = (block) => {
       );
     case "heading_1":
       return (
-        <h1>
+        <h1 className="text-3xl my-5 before:content-['#'] before:mr-1 opacity-70">
           <Text text={value.text} />
         </h1>
       );
     case "heading_2":
       return (
-        <h2>
+        <h2 className="text-2xl my-4 before:content-['##'] before:mr-1 opacity-70">
           <Text text={value.text} />
         </h2>
       );
     case "heading_3":
       return (
-        <h3>
+        <h3 className="text-xl my-3 before:content-['###'] before:mr-1 opacity-70">
           <Text text={value.text} />
         </h3>
       );
@@ -97,12 +97,12 @@ const renderBlock = (block) => {
       const caption = value.caption && value.caption.length > 0 ? value.caption[0].plain_text : "";
       return (
         <figure>
-          <img className={styles.post_image} src={src} alt={caption} />
+          <img className="w-full h-auto my-2" src={src} alt={caption} />
           {caption && <figcaption>{caption}</figcaption>}
         </figure>
       );
     case "divider":
-      return <hr key={id} />;
+      return <hr key={id} className="mb-3" />;
     case "quote":
       return <blockquote key={id}>{value.text[0].plain_text}</blockquote>;
     case "code":
@@ -128,8 +128,8 @@ export default function Post({ page, blocks }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <article className={styles.container}>
-        <h1 className={styles.name}>
+      <article className="py-0 px-5 max-w-screen-lg my-0 mx-auto">
+        <h1 className="text-4xl font-extrabold my-10">
           <Text text={page.properties.Name.title} />
         </h1>
         <section>
@@ -137,7 +137,7 @@ export default function Post({ page, blocks }) {
             <Fragment key={block.id}>{renderBlock(block)}</Fragment>
           ))}
           <Link href="/">
-            <a className={styles.back}>← Go home</a>
+            <a className="inline-block my-5">← Go home</a>
           </Link>
         </section>
       </article>
