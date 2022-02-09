@@ -9,6 +9,7 @@ import Code from "../components/Code"
 import Head from "next/head";
 import Link from "next/link";
 import { BlockList } from 'net';
+import TableOfContents from '../components/TableOfContents';
 
 interface ChildrenBlock {
   id: string,
@@ -35,8 +36,8 @@ function getChildBlocksOfBlock(raw_block: Block, childrenBlocks: ChildrenBlock[]
 }
 
 function findBookmarkPreview(bookmarkBlock: BookmarkBlock, previewList: BookmarkPreview[]) {
-  for(let preview of previewList) {
-    if(preview.url === bookmarkBlock.bookmark.url){
+  for (let preview of previewList) {
+    if (preview.url === bookmarkBlock.bookmark.url) {
       return preview
     }
   }
@@ -59,20 +60,20 @@ const renderBlock = (block: Block, bookmarkPreviews: BookmarkPreview[]) => {
     }
     case "heading_1": {
       return (
-        <h1 className="text-3xl my-6 before:content-['#'] before:mr-1 opacity-70 font-bold">
+        <h1 id={block.id} className="text-5xl my-6 opacity-70 font-bold">
           <Text textList={block.heading_1.text} />
         </h1>
       );
     }
     case "heading_2":
       return (
-        <h2 className="text-2xl my-5 before:content-['##'] before:mr-1 opacity-70 font-bold">
+        <h2 id={block.id} className="text-3xl my-5 opacity-70 font-bold">
           <Text textList={block.heading_2.text} />
         </h2>
       );
     case "heading_3":
       return (
-        <h3 className="text-xl my-4 before:content-['###'] before:mr-1 opacity-70 font-bold">
+        <h3 id={block.id} className="text-xl my-4 opacity-70 font-bold">
           <Text textList={block.heading_3.text} />
         </h3>
       );
@@ -146,9 +147,19 @@ export default function Post({ page, blocks, childBlocks, bookmarkPreviews }: {
     return <div />;
   }
 
+  const date = "last_edited_time" in page ? new Date(page.last_edited_time) : new Date();
+  const dateString = date.toLocaleString(
+    "en-US",
+    {
+      month: "short",
+      day: "2-digit",
+      year: "numeric",
+    }
+  );
+
   let title = (page as any).properties.Name.title as TextList
   let title_plain_text = title.map((value, index) => {
-    if(value.type !== "text") {
+    if (value.type !== "text") {
       return ""
     } else {
       return value.text.content
@@ -161,23 +172,38 @@ export default function Post({ page, blocks, childBlocks, bookmarkPreviews }: {
         <title>{title_plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <div className="flex flex-row justify-center">
 
-      <article className="py-0 px-5 max-w-screen-lg my-0 mx-auto">
-        <h1 className="text-4xl font-extrabold my-10">
-          {
-            title !== undefined ?
-              <Text textList={title} /> : null
-          }
-        </h1>
-        <section>
-          {blocks.map((block) => (
-            <Fragment key={block.id}>{renderBlock(block, bookmarkPreviews)}</Fragment>
-          ))}
-          <Link href="/">
-            <a className="inline-block my-5">← Go home</a>
-          </Link>
-        </section>
-      </article>
+        <div className="w-1/4 sm:hidden lg:block">
+          <div className="sticky top-10">
+            <TableOfContents blocks={blocks} />
+          </div>
+        </div>
+
+        <article className="py-0 px-5 max-w-screen-lg">
+          <div className="my-6 sm:block lg:hidden">
+              <TableOfContents blocks={blocks} />
+          </div>
+          <div className="my-10">
+            <h1 id="title" className="text-4xl font-extrabold">
+              {
+                title !== undefined ?
+                  <Text textList={title} /> : null
+              }
+            </h1>
+            <p className="my-2 opacity-60">{dateString}</p>
+          </div>
+          <section>
+            {blocks.map((block) => (
+              <Fragment key={block.id}>{renderBlock(block, bookmarkPreviews)}</Fragment>
+            ))}
+            <Link href="/">
+              <a className="inline-block my-5">← Go home</a>
+            </Link>
+          </section>
+        </article>
+        <div className="w-1/4 sm:hidden lg:block"></div>
+      </div>
     </div>
   );
 }

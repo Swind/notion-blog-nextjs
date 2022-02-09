@@ -17,7 +17,7 @@ function GetTags(post: Post) {
   if("properties" in post && "Tags" in post.properties && post.properties.Tags.type === "multi_select") {
     return post.properties.Tags.multi_select;
   }
-  return [] 
+  return []
 }
 
 export default function Home({ posts }: HomeProps) {

@@ -34,7 +34,7 @@ export default function Text({ textList }: TextProps) {
             style={color !== "default" ? { color } : {}}
             key={index}
           >
-            {text.link ? <a href={text.link.url}>{text.content}</a> : text.content}
+            {text.link ? <a href={text.link.url} className="underline font-semibold mx-1">{text.content}</a> : text.content}
           </span>
         );
       })
