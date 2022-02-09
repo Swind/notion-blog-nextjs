@@ -8,6 +8,7 @@ import Bookmark from "../components/Bookmark"
 import Code from "../components/Code"
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image"
 import { BlockList } from 'net';
 import TableOfContents from '../components/TableOfContents';
 
@@ -116,7 +117,7 @@ const renderBlock = (block: Block, bookmarkPreviews: BookmarkPreview[]) => {
       const caption = block.image.caption && block.image.caption.length > 0 ? block.image.caption[0].plain_text : "";
       return (
         <figure>
-          <img className="w-full h-auto my-2" src={src} alt={caption} />
+          <Image className="w-full h-auto my-2" src={src} alt={caption} />
           {caption && <figcaption>{caption}</figcaption>}
         </figure>
       );

@@ -1,5 +1,6 @@
 import React from 'react'
 
+import Image from "next/image"
 import { Bookmark as BookmarkType, BookmarkPreview } from '../pages/api/notion';
 
 export default function Bookmark({ bookmark, preview }: { bookmark: BookmarkType, preview: BookmarkPreview | null }) {
@@ -27,7 +28,7 @@ export default function Bookmark({ bookmark, preview }: { bookmark: BookmarkType
             </div>
             <div className="flex mt-2">
               <div className="h-full flex flex-col justify-center mr-2">
-                <img className="w-4 h-4" src={favicon} alt="favicon" />
+                { favicon ? <Image className="w-4 h-4" src={favicon} alt="favicon" /> : null }
               </div>
               <div className="text-sm overflow-hidden whitespace-nowrap text-ellipsis">
                 {bookmark.url}
@@ -35,7 +36,7 @@ export default function Bookmark({ bookmark, preview }: { bookmark: BookmarkType
             </div>
           </div>
           <div className="w-1/4 object-cover ml-4">
-            {image ? <img src={image} alt={preview.title} /> : null}
+            {image ? <Image src={image} alt={preview.title} /> : null}
           </div>
         </div>
       </a>

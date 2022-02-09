@@ -55,7 +55,7 @@ const TableOfContents = ({ blocks }: { blocks: Block[] }) => {
       return;
     }
 
-    return <SmoothLink id={block.id}>{generateText(block)}</SmoothLink>
+    return <SmoothLink id={block.id} key={block.id}>{generateText(block)}</SmoothLink>
   })
 
   return (
