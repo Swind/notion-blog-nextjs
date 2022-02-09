@@ -8,7 +8,6 @@ import Bookmark from "../components/Bookmark"
 import Code from "../components/Code"
 import Head from "next/head";
 import Link from "next/link";
-import Image from "next/image"
 import { BlockList } from 'net';
 import TableOfContents from '../components/TableOfContents';
 
@@ -117,7 +116,7 @@ const renderBlock = (block: Block, bookmarkPreviews: BookmarkPreview[]) => {
       const caption = block.image.caption && block.image.caption.length > 0 ? block.image.caption[0].plain_text : "";
       return (
         <figure>
-          <Image className="w-full h-auto my-2" src={src} alt={caption} />
+          <img className="w-full h-auto my-2" src={src} alt={caption} />
           {caption && <figcaption>{caption}</figcaption>}
         </figure>
       );
@@ -175,7 +174,7 @@ export default function Post({ page, blocks, childBlocks, bookmarkPreviews }: {
       </Head>
       <div className="flex flex-row justify-center">
 
-        <div className="w-1/4 sm:hidden lg:block">
+        <div className="w-1/4 sm:hidden lg:block ml-4">
           <div className="sticky top-10">
             <TableOfContents blocks={blocks} />
           </div>
