@@ -172,18 +172,15 @@ export default function Post({ page, blocks, childBlocks, bookmarkPreviews }: {
         <title>{title_plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex flex-row justify-center">
+      <div className="flex flex-row">
 
-        <div className="w-1/4 sm:hidden lg:block ml-4">
+        <div className="w-1/4 ml-4 hidden lg:block">
           <div className="sticky top-10">
             <TableOfContents blocks={blocks} />
           </div>
         </div>
 
         <article className="py-0 px-5 max-w-screen-lg">
-          <div className="my-6 sm:block lg:hidden">
-              <TableOfContents blocks={blocks} />
-          </div>
           <div className="my-10">
             <h1 id="title" className="text-4xl font-extrabold">
               {
