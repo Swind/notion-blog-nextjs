@@ -16,14 +16,14 @@ type BookmarkBlockOf<T> = T extends { bookmark: unknown } ? T : never;
 export type BookmarkBlock = BookmarkBlockOf<Block>
 
 type ParagraphOf<T> = T extends { paragraph: unknown } ? T["paragraph"] : never;
-export type Paragraph =  ParagraphOf<Block>
+export type Paragraph = ParagraphOf<Block>
 
 export type TextList = Paragraph["text"]
 export type Text = TextList[0]
 
 export type Page = GetPageResponse
 
- export interface BookmarkPreview {
+export interface BookmarkPreview {
   url: string,
   title: string,
   image: string,
@@ -68,11 +68,20 @@ export const getPage = async (pageId: string) => {
 }
 
 export const getBlocks = async (blockId: string): Promise<Blocks> => {
-  const resp = await notion.blocks.children.list({
+  let resp = await notion.blocks.children.list({
     block_id: blockId,
   })
-
   let blocks = resp.results
+
+  while (resp.next_cursor) {
+    resp = await notion.blocks.children.list({
+      start_cursor: resp.next_cursor,
+      block_id: blockId,
+    })
+
+    blocks = blocks.concat(resp.results)
+  }
+
   return blocks
 }
 
