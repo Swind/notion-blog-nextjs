@@ -174,7 +174,7 @@ export default function Post({ page, blocks, childBlocks, bookmarkPreviews }: {
       </Head>
       <div className="flex flex-row">
 
-        <div className="w-1/4 ml-4 hidden lg:block">
+        <div className="w-1/3 ml-4 hidden xl:block">
           <div className="sticky top-10">
             <TableOfContents blocks={blocks} />
           </div>
@@ -199,7 +199,7 @@ export default function Post({ page, blocks, childBlocks, bookmarkPreviews }: {
             </Link>
           </section>
         </article>
-        <div className="w-1/4 sm:hidden lg:block"></div>
+        <div className="w-1/3 sm:hidden lg:block"></div>
       </div>
     </div>
   );
