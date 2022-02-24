@@ -60,20 +60,20 @@ const renderBlock = (block: Block, bookmarkPreviews: BookmarkPreview[]) => {
     }
     case "heading_1": {
       return (
-        <h1 id={block.id} className="text-5xl my-6 opacity-70 font-bold">
+        <h1 id={block.id} className="text-3xl my-6 opacity-70 font-bold">
           <Text textList={block.heading_1.text} />
         </h1>
       );
     }
     case "heading_2":
       return (
-        <h2 id={block.id} className="text-3xl my-5 opacity-70 font-bold">
+        <h2 id={block.id} className="text-xl my-5 opacity-70 font-bold">
           <Text textList={block.heading_2.text} />
         </h2>
       );
     case "heading_3":
       return (
-        <h3 id={block.id} className="text-xl my-4 opacity-70 font-bold">
+        <h3 id={block.id} className="text-lg my-4 opacity-70 font-bold">
           <Text textList={block.heading_3.text} />
         </h3>
       );
