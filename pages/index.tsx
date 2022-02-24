@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getPostsFromDatabase, TextList } from "./api/notion";
 import Text from "../components/Text";
 import Tags from "../components/Tags";
+import Header from "../components/Header";
 
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
@@ -28,11 +29,11 @@ export default function Home({ posts }: HomeProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container w-full md:max-w-3xl mx-auto pt-20">
-        <header className="font-sans mb-14">
-          <h1 className="font-bold font-sans break-normal text-gray-900 pt-6 pb-2 text-3xl md:text-4xl opacity-70 leading-6">就只是一個筆記</h1>
-        </header>
+      <div className="mb-10">
+        <Header title="就只是一個筆記"/>
+      </div>
 
+      <main className="container w-full md:max-w-3xl mx-auto">
         <h2 className="mb-3 pb-3 border-b-2 border-gray-600 uppercase text-xl opacity-60 tracking-wide">All Posts</h2>
         <ol className="list-none m-0 p-0">
           {posts.map((post) => {

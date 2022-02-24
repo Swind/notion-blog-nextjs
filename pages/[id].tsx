@@ -4,6 +4,7 @@ import { Page, getPage, getBlocks, Block, getBookmarkPreview, BookmarkBlock, Boo
 import { databaseId } from './index'
 import { GetStaticProps } from 'next'
 import Text from "../components/Text";
+import Header from "../components/Header";
 import Bookmark from "../components/Bookmark"
 import Code from "../components/Code"
 import Head from "next/head";
@@ -168,19 +169,18 @@ export default function Post({ page, blocks, childBlocks, bookmarkPreviews }: {
 
   return (
     <div>
+      <div className="mb-10">
+        <Header title="就只是一個筆記"/>
+      </div>
+
       <Head>
         <title>{title_plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <div className="flex flex-row">
 
-        <div className="w-1/3 ml-4 hidden xl:block">
-          <div className="sticky top-10">
-            <TableOfContents blocks={blocks} />
-          </div>
-        </div>
-
-        <article className="py-0 px-5 max-w-screen-lg">
+        <article className="py-0 max-w-screen-lg mx-5 xl:mx-auto">
           <div className="my-10">
             <h1 id="title" className="text-4xl font-extrabold">
               {
@@ -199,7 +199,13 @@ export default function Post({ page, blocks, childBlocks, bookmarkPreviews }: {
             </Link>
           </section>
         </article>
-        <div className="w-1/3 sm:hidden lg:block"></div>
+
+        <div className="w-1/4 ml-6 hidden xl:block">
+          <div className="sticky top-10">
+            <TableOfContents blocks={blocks} />
+          </div>
+        </div>
+
       </div>
     </div>
   );
