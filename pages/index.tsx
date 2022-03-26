@@ -33,9 +33,9 @@ export default function Home({ posts }: HomeProps) {
         <Header title="就只是一個筆記"/>
       </div>
 
-      <main className="container w-full md:max-w-3xl mx-auto">
+      <main className="container w-full">
         <h2 className="mb-3 pb-3 border-b-2 border-gray-600 uppercase text-xl opacity-60 tracking-wide">All Posts</h2>
-        <ol className="list-none m-0 p-0">
+        <ol className="mx-auto">
           {posts.map((post) => {
             const date = "last_edited_time" in post ? new Date(post.last_edited_time) : new Date();
             let tags = GetTags(post)
