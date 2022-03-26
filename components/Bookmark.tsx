@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { Bookmark as BookmarkType, BookmarkPreview } from '../pages/api/notion';
+import { BookmarkPreview } from '../pages/api/notion';
 
-export default function Bookmark({ bookmark, preview }: { bookmark: BookmarkType, preview: BookmarkPreview | null }) {
+export default function Bookmark({ url, preview }: { url: string, preview: BookmarkPreview | null }) {
   if (preview === null) {
     return (
-      <a href={bookmark.url}>
+      <a href={url}>
         Bookmark
       </a>
     )
@@ -14,7 +14,7 @@ export default function Bookmark({ bookmark, preview }: { bookmark: BookmarkType
     let favicon = preview.favicons.length > 0 ? preview.favicons[0] : undefined;
 
     return (
-      <a href={bookmark.url}>
+      <a href={url}>
         <div className="flex justify-start w-full h-32 p-3 my-4 border border-gray-800 rounded-md mx-auto hover:bg-gray-100">
           <div className="w-3/4 flex flex-col">
 
@@ -32,7 +32,7 @@ export default function Bookmark({ bookmark, preview }: { bookmark: BookmarkType
                 {favicon ? <img className="w-4 h-4" src={favicon} alt="favicon" /> : null}
               </div>
               <div className="text-sm overflow-hidden whitespace-nowrap text-ellipsis">
-                {bookmark.url}
+                {url}
               </div>
             </div>
 

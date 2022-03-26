@@ -15,7 +15,7 @@ interface HomeProps {
 }
 
 function GetTags(post: Post) {
-  if("properties" in post && "Tags" in post.properties && post.properties.Tags.type === "multi_select") {
+  if ("properties" in post && "Tags" in post.properties && post.properties.Tags.type === "multi_select") {
     return post.properties.Tags.multi_select;
   }
   return []
@@ -30,7 +30,11 @@ export default function Home({ posts }: HomeProps) {
       </Head>
 
       <div className="mb-10">
-        <Header title="就只是一個筆記"/>
+        <Link href="/">
+          <a>
+            <Header title="就只是一個筆記" />
+          </a>
+        </Link>
       </div>
 
       <main className="container w-full">

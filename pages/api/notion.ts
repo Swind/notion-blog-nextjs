@@ -15,6 +15,9 @@ export type Bookmark = BookmarkOf<Block>
 type BookmarkBlockOf<T> = T extends { bookmark: unknown } ? T : never;
 export type BookmarkBlock = BookmarkBlockOf<Block>
 
+type LinkPreviewBlockOf<T> = T extends { link_preview: unknown } ? T : never;
+export type LinkPreviewBlock = LinkPreviewBlockOf<Block>
+
 type ParagraphOf<T> = T extends { paragraph: unknown } ? T["paragraph"] : never;
 export type Paragraph = ParagraphOf<Block>
 
@@ -85,12 +88,12 @@ export const getBlocks = async (blockId: string): Promise<Blocks> => {
   return blocks
 }
 
-export async function getBookmarkPreview(block: Bookmark) {
-  let preview = await getLinkPreview(block.url);
-  let domain = new URL(block.url).hostname;
+export async function getUrlPreview(url: string) {
+  let preview = await getLinkPreview(url);
+  let domain = new URL(url).hostname;
 
   var bookmarkPreview = {
-    url: block.url,
+    url: url,
     title: "",
     image: "",
     description: "",

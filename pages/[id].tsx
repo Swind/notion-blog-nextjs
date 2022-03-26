@@ -1,6 +1,6 @@
 import React from 'react'
 import { Fragment } from "react";
-import { Page, getPage, getBlocks, Block, getBookmarkPreview, BookmarkBlock, BookmarkPreview, getPostsFromDatabase, TextList } from './api/notion';
+import { Page, getPage, getBlocks, Block, getUrlPreview, BookmarkBlock, BookmarkPreview, getPostsFromDatabase, TextList, LinkPreviewBlock } from './api/notion';
 import { databaseId } from './index'
 import { GetStaticProps } from 'next'
 import Text from "../components/Text";
@@ -9,7 +9,6 @@ import Bookmark from "../components/Bookmark"
 import Code from "../components/Code"
 import Head from "next/head";
 import Link from "next/link";
-import { BlockList } from 'net';
 import TableOfContents from '../components/TableOfContents';
 
 interface ChildrenBlock {
@@ -36,9 +35,9 @@ function getChildBlocksOfBlock(raw_block: Block, childrenBlocks: ChildrenBlock[]
   return []
 }
 
-function findBookmarkPreview(bookmarkBlock: BookmarkBlock, previewList: BookmarkPreview[]) {
+function findPreview(url: string, previewList: BookmarkPreview[]) {
   for (let preview of previewList) {
-    if (preview.url === bookmarkBlock.bookmark.url) {
+    if (preview.url === url) {
       return preview
     }
   }
@@ -61,16 +60,22 @@ const renderBlock = (block: Block, bookmarkPreviews: BookmarkPreview[]) => {
     }
     case "heading_1": {
       return (
-        <h1 id={block.id} className="text-3xl my-6 opacity-70 font-bold">
-          <Text textList={block.heading_1.text} />
-        </h1>
+        <div>
+          <h1 id={block.id} className="text-3xl mt-6 opacity-70 font-bold">
+            <Text textList={block.heading_1.text} />
+          </h1>
+          <div className="border-t-2 border-gray-800 my-3"></div>
+        </div>
       );
     }
     case "heading_2":
       return (
-        <h2 id={block.id} className="text-xl my-5 opacity-70 font-bold">
-          <Text textList={block.heading_2.text} />
-        </h2>
+        <div>
+          <h2 id={block.id} className="text-xl my-5 opacity-70 font-bold">
+            <Text textList={block.heading_2.text} />
+          </h2>
+          <div className="border-t border-gray-300 my-3"></div>
+        </div>
       );
     case "heading_3":
       return (
@@ -122,15 +127,18 @@ const renderBlock = (block: Block, bookmarkPreviews: BookmarkPreview[]) => {
         </figure>
       );
     case "divider":
-      return <hr key={block.id} className="mb-3" />;
+      //return <hr key={block.id} className="mb-3" />;
+      return null
     case "quote":
-      return <blockquote key={block.id}>{block.quote.text[0].plain_text}</blockquote>;
+      return <blockquote key={block.id} className="border-l-4 border-black p-4 my-2 bg-gray-100">{block.quote.text[0].plain_text}</blockquote>
     case "code":
       return <Code code={block.code}></Code>
     case "table_of_contents":
       return null
     case "bookmark":
-      return <Bookmark bookmark={block.bookmark} preview={findBookmarkPreview(block, bookmarkPreviews)}></Bookmark>
+      return <Bookmark url={block.bookmark.url} preview={findPreview(block.bookmark.url, bookmarkPreviews)}></Bookmark>
+    case "link_preview":
+      return <Bookmark url={block.link_preview.url} preview={findPreview(block.link_preview.url, bookmarkPreviews)}></Bookmark>
     default:
       return `❌ Unsupported block (${block.type === "unsupported" ? `unsupported by Notion API ${block.type}` : block.type
         })`;
@@ -170,7 +178,11 @@ export default function Post({ page, blocks, childBlocks, bookmarkPreviews }: {
   return (
     <div>
       <div className="mb-10">
-        <Header title="就只是一個筆記"/>
+        <Link href="/">
+          <a>
+            <Header title="就只是一個筆記" />
+          </a>
+        </Link>
       </div>
 
       <Head>
@@ -241,28 +253,21 @@ export const getStaticProps: GetStaticProps = async (context) => {
       })
   );
 
-  /*
-  const blocksWithChildren: Block[] = blocks.map((raw_block) => {
-    // For the notion client fxxk type
-    let block = raw_block as any
-
-    // Add child blocks if the block should contain children but none exists
-    if ("has_children" in block && block.has_children && !block[block.type].children) {
-      block[block.type]["children"] = childBlocks.find(
-        (x) => x.id === block.id
-      )?.children;
-    }
-
-    return block as Block;
-  });
-  */
-
   const bookmarkBlocks = blocks.filter((block) => "type" in block && block.type === "bookmark") as BookmarkBlock[]
   const bookmarkPreviews = await Promise.all(
     bookmarkBlocks
       .map(
         async (block: BookmarkBlock) => {
-          return await getBookmarkPreview(block.bookmark);
+          return await getUrlPreview(block.bookmark.url);
+        }
+      ))
+
+  const linkPreviewBlocks = blocks.filter((block) => "type" in block && block.type === "link_preview") as LinkPreviewBlock[]
+  const linkPreviews = await Promise.all(
+    linkPreviewBlocks
+      .map(
+        async (block: LinkPreviewBlock) => {
+          return await getUrlPreview(block.link_preview.url);
         }
       ))
 
@@ -271,7 +276,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       page,
       blocks,
       childBlocks,
-      bookmarkPreviews,
+      bookmarkPreviews: bookmarkPreviews.concat(linkPreviews),
     },
     revalidate: 1,
   };
